@@ -1,0 +1,20 @@
+{
+  "name": "europlus",
+  "homepage": "https://github.com/lamarques/europlus",
+  "authors": [
+    "Rogerio Lamarques <rogerio.lamarques@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^4.0.0"
+  }
+}
