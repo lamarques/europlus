@@ -9,10 +9,17 @@
 namespace App\Controller;
 
 
+use App\Entity\Clientes;
+use App\Entity\Pedidos;
+use App\Entity\Usuarios;
+use App\Repository\PedidosRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiPedidosController extends Controller
 {
@@ -22,37 +29,49 @@ class ApiPedidosController extends Controller
      * @Route("/api/pedidos/{busca}", defaults={"busca" = null})
      * @Method({"GET"})
      */
-    public function getPedidos($busca = null)
+    public function showAction(EntityManagerInterface $entityManager, $busca = null)
     {
-        $dados = [];
-        if(!empty($busca)){
-            for($i = 0; $i < 3; $i++){
-                $dados[] = [
-                    'id' => $i + 1,
-                    'codigoReserva' => rand(0, 999999),
-                    'cliente' => 'Maria rui',
-                    'cpfcnpj' => '999.999.999-99'
-                ];
-            }
+        if (!empty($busca)) {
+            $pedidosRepository = $entityManager->getRepository(Pedidos::class);
+            $pedidos = $pedidosRepository->findByGenericFilter($busca);
         } else {
-            for($i = 0; $i < 10; $i++){
-                $dados[] = [
-                    'id' => $i + 1,
-                    'codigoReserva' => rand(0, 999999),
-                    'cliente' => 'Maria rui',
-                    'cpfcnpj' => '999.999.999-99'
-                ];
-            }
+            $pedidos = $entityManager->getRepository(Pedidos::class)->findBy(['ativo' => true], ['id' => 'desc']);
         }
-        return $this->json($dados);
+        $data = $this->get("serializer")->serialize($pedidos, 'json', ['groups' => ['rest']]);
+        $response = new JsonResponse();
+        $response->setContent($data);
+        return $response;
     }
 
     /**
      * @Route("/api/pedidos")
      * @Method({"POST"})
      */
-    public function savePedidos()
+    public function savePedidos(Request $request, EntityManagerInterface $entityManager)
     {
-        return $this->json(1,200);
+        $dados = json_decode($request->getContent());
+        $clientes = $entityManager->getRepository(Clientes::class)->find($dados->idcliente);
+        $usuarios = $entityManager->getRepository(Usuarios::class)->find(5);
+        $pedidos = new Pedidos();
+        $pedidos->setClienteId($clientes);
+        $pedidos->setUsuarioId($usuarios);
+        if(!empty($dados->codigoReserva)) {
+            $pedidos->setCodigoReserva($dados->codigoReserva);
+        }
+        $pedidos->setObservacoes($dados->observacoes);
+        $pedidos->setValorTotal($dados->valorTotal);
+        if(!empty($dados->valorDesconto)) {
+            $pedidos->setValorDesconto($dados->valorDesconto);
+        }
+        $pedidos->setDataPedido(new \DateTime());
+        $pedidos->setDataUpdate(new \DateTime());
+        $pedidos->setStatus('AC');
+        $pedidos->setAtivo(true);
+        $entityManager->persist($pedidos);
+        $entityManager->flush();
+        $data = $this->get("serializer")->serialize($pedidos, 'json', ['groups' => ['rest']]);
+        $response = new JsonResponse();
+        $response->setContent($data);
+        return $response;
     }
 }

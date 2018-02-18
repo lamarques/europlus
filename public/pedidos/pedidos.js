@@ -15,6 +15,7 @@ angular.module('europlusApp.pedidos', ['ngRoute'])
         vm.dados = [];
         vm.search = '';
         vm.pedido = {};
+        vm.pedido.idcliente = 10;
         vm.getTabela = function () {
             var link = '/api/pedidos';
             if (vm.search != '') {
@@ -24,12 +25,13 @@ angular.module('europlusApp.pedidos', ['ngRoute'])
                 vm.dados = response.data;
             });
         };
+
         vm.save = function () {
             if (vm.pedido.observacoes == null) {
-                vm.falhaObzervacoes = true;
+                vm.falhaObservacoes = true;
                 return false;
             } else {
-                vm.falhaObzervacoes = false;
+                vm.falhaObservacoes = false;
             }
             $http({
                 url: '/api/pedidos',
@@ -38,6 +40,7 @@ angular.module('europlusApp.pedidos', ['ngRoute'])
             })
                 .then(function (response) {
                         vm.pedidosalvo = true;
+                        vm.getTabela();
                     },
                     function (response) {
                         alert('Falha ao salvar pedido');
