@@ -68,7 +68,7 @@ class Pagamentos
      * @var Cartoes
      *
      * @ORM\ManyToOne(targetEntity="Cartoes", inversedBy="pagamentos")
-     * @ORM\JoinColumn(name="cartoes_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="cartoesId", referencedColumnName="id")
      */
     protected $cartoesId;
 
@@ -76,7 +76,7 @@ class Pagamentos
      * @var TipoPagamento
      *
      * @ORM\ManyToOne(targetEntity="TipoPagamento", inversedBy="pagamentos")
-     * @ORM\JoinColumn(name="tipo_pagamento_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="tipoPagamentoId", referencedColumnName="id")
      */
     protected $tipoPagamentoId;
 

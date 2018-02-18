@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Clientes;
 use App\Entity\Pedidos;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -13,16 +14,17 @@ class PedidosRepository extends ServiceEntityRepository
         parent::__construct($registry, Pedidos::class);
     }
 
-    /*
-    public function findBySomething($value)
+    public function findByGenericFilter($value)
     {
         return $this->createQueryBuilder('p')
-            ->where('p.something = :value')->setParameter('value', $value)
-            ->orderBy('p.id', 'ASC')
+            ->join(Clientes::class, "c", 'WITH', 'p.clienteId = c.id')
+            ->where('p.codigoReserva LIKE :value')->setParameter('value', $value."%")
+            ->orWhere('c.nome LIKE :value')->setParameter('value', "%" . $value. "%")
+            ->orWhere('c.cpfCnpj LIKE :value')->setParameter('value', "%" . $value. "%")
+            ->orderBy('p.id', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
 }

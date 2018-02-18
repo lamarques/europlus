@@ -43,7 +43,7 @@ class Usuarios
     /**
      * @var string
      *
-     * @ORM\Column(type="string", name="ip_acesso", length=15)
+     * @ORM\Column(type="string", name="ip_acesso", length=15, nullable=true)
      */
     private $ipAcesso;
 
@@ -51,7 +51,7 @@ class Usuarios
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime", name="data_acesso")
+     * @ORM\Column(type="datetime", name="data_acesso", nullable=true)
      */
     private $dataAcesso;
 
@@ -72,7 +72,7 @@ class Usuarios
     /**
      * @var Pedidos
      *
-     * @ORM\OneToMany(targetEntity="Pedidos", mappedBy="clienteId")
+     * @ORM\OneToMany(targetEntity="Pedidos", mappedBy="usuarioId")
      */
     private $pedidos;
 
@@ -223,7 +223,7 @@ class Usuarios
     /**
      * @return Pedidos
      */
-    public function getPedidos(): Pedidos
+    public function getPedidos()
     {
         return $this->pedidos;
     }

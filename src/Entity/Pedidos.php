@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\PedidosRepository;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PedidosRepository")
@@ -14,6 +16,7 @@ class Pedidos
     /**
      * @var int
      *
+     * @Groups({"rest"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="id")
@@ -24,6 +27,7 @@ class Pedidos
     /**
      * @var string
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="string", name="codigo_reserva", length=255, nullable=true)
      */
     private $codigoReserva;
@@ -31,6 +35,7 @@ class Pedidos
     /**
      * @var \DateTime
      *
+     * @Groups({"rest"})
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", name="data_pedido")
      */
@@ -47,6 +52,7 @@ class Pedidos
     /**
      * @var string
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="text", name="observacoes")
      */
     private $observacoes;
@@ -54,6 +60,7 @@ class Pedidos
     /**
      * @var float
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="decimal", precision=12, scale=2, name="valor_total")
      */
     private $valorTotal;
@@ -61,6 +68,7 @@ class Pedidos
     /**
      * @var float
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="decimal", precision=12, scale=2, name="valor_desconto", nullable=true)
      */
     private $valorDesconto;
@@ -68,6 +76,7 @@ class Pedidos
     /**
      * @var string
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="string", name="status", length=10)
      */
     private $status;
@@ -75,6 +84,7 @@ class Pedidos
     /**
      * @var boolean
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="boolean", name="ativo", options={"default" : true})
      */
     private $ativo;
@@ -82,16 +92,18 @@ class Pedidos
     /**
      * @var Clientes
      *
+     * @Groups({"rest"})
      * @ORM\ManyToOne(targetEntity="Clientes", inversedBy="pedidos")
-     * @ORM\JoinColumn(name="cliente_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="clienteId", referencedColumnName="id")
      */
     protected $clienteId;
 
     /**
      * @var Usuarios
      *
+     * @Groups({"rest"})
      * @ORM\ManyToOne(targetEntity="Usuarios", inversedBy="pedidos")
-     * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="usuarioId", referencedColumnName="id")
      */
     protected $usuarioId;
 
@@ -128,9 +140,9 @@ class Pedidos
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCodigoReserva(): string
+    public function getCodigoReserva(): ?string
     {
         return $this->codigoReserva;
     }
@@ -213,14 +225,14 @@ class Pedidos
      */
     public function setValorTotal(float $valorTotal): Pedidos
     {
-        $this->valorTotal = $valorTotal;
+        $this->valorTotal = (float) $valorTotal;
         return $this;
     }
 
     /**
      * @return float
      */
-    public function getValorDesconto(): float
+    public function getValorDesconto()
     {
         return $this->valorDesconto;
     }
@@ -265,7 +277,7 @@ class Pedidos
      * @param bool $ativo
      * @return Pedidos
      */
-    public function setAtivo(bool $ativo): Pedidos
+    public function setAtivo(bool $ativo)
     {
         $this->ativo = $ativo;
         return $this;
@@ -274,7 +286,7 @@ class Pedidos
     /**
      * @return Clientes
      */
-    public function getClienteId(): Clientes
+    public function getClienteId()
     {
         return $this->clienteId;
     }
@@ -283,7 +295,7 @@ class Pedidos
      * @param Clientes $clienteId
      * @return Pedidos
      */
-    public function setClienteId(Clientes $clienteId): Pedidos
+    public function setClienteId(Clientes $clienteId)
     {
         $this->clienteId = $clienteId;
         return $this;
@@ -292,7 +304,7 @@ class Pedidos
     /**
      * @return Usuarios
      */
-    public function getUsuarioId(): Usuarios
+    public function getUsuarioId()
     {
         return $this->usuarioId;
     }
@@ -301,11 +313,20 @@ class Pedidos
      * @param Usuarios $usuarioId
      * @return Pedidos
      */
-    public function setUsuarioId(Usuarios $usuarioId): Pedidos
+    public function setUsuarioId(Usuarios $usuarioId)
     {
         $this->usuarioId = $usuarioId;
         return $this;
     }
+
+    /**
+     * @return Pagamentos
+     */
+    public function getPagamentos()
+    {
+        return $this->pagamentos;
+    }
+
 
 
 }

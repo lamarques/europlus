@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClientesRepository")
@@ -13,6 +14,7 @@ class Clientes
     /**
      * @var int
      *
+     * @Groups({"rest"})
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer", name="id")
@@ -22,6 +24,7 @@ class Clientes
     /**
      * @var string
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="string", length=255, name="nome")
      */
     private $nome;
@@ -29,6 +32,7 @@ class Clientes
     /**
      * @var string
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="string", length=20, name="cpfcnpj")
      */
     private $cpfCnpj;
@@ -36,6 +40,7 @@ class Clientes
     /**
      * @var string
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="string", length=255, name="email")
      */
     private $email;
@@ -59,6 +64,7 @@ class Clientes
     /**
      * @var boolean
      *
+     * @Groups({"rest"})
      * @ORM\Column(type="boolean", name="ativo", options={"default" : true})
      */
     private $ativo;
@@ -199,7 +205,7 @@ class Clientes
     /**
      * @return Pedidos
      */
-    public function getPedidos(): Pedidos
+    public function getPedidos()
     {
         return $this->pedidos;
     }

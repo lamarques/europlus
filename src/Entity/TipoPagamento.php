@@ -96,7 +96,7 @@ class TipoPagamento
     /**
      * @return Pagamentos
      */
-    public function getPagamentos(): Pagamentos
+    public function getPagamentos()
     {
         return $this->pagamentos;
     }
